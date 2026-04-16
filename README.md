@@ -1,73 +1,41 @@
-# React + TypeScript + Vite
+# Event Manager - 智能任务管理系统
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一款基于 React + TypeScript 构建的现代化任务管理工具，集成 DeepSeek AI 智能规划，帮助你高效管理学习与工作任务。
 
-Currently, two official plugins are available:
+## ✨ 功能特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **任务管理**：创建、编辑、删除任务，支持分组、优先级、截止日期、预估时间
+- **AI 智能规划**：接入 DeepSeek 大模型，根据任务优先级和预估时间自动生成最优学习计划
+- **时间线规划**：可视化时间轴，支持手动和 AI 自动排班，自动插入休息时间
+- **分组管理**：自定义任务分组，支持批量移动、删除分组（可选保留任务）
+- **批量操作**：多选任务批量删除、批量移动分组
+- **附件支持**：拖拽上传图片和文件，图片预览、文件列表、全屏查看
+- **备注系统**：任务备注悬浮提示（tooltip），快速查看备注内容
+- **完成总结**：任务完成后记录实际用时、难度评估、心得体会
+- **数据统计**：可视化任务完成情况和时间分配
+- **数据持久化**：所有数据存储在浏览器 localStorage，无需登录
 
-## React Compiler
+## 🛠️ 技术栈
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19** + **TypeScript**
+- **Vite** 构建工具
+- **Framer Motion** 动画
+- **Tailwind CSS** 样式
+- **DeepSeek API** AI 智能规划
 
-## Expanding the ESLint configuration
+## 🚀 快速开始
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# 安装依赖
+npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# 启动开发服务器
+npm run dev
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 构建生产版本
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📄 License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+MIT License - 详见 [LICENSE](./LICENSE) 文件
