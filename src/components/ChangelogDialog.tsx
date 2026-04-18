@@ -14,8 +14,20 @@ export function ChangelogDialog({ isOpen, onClose }: ChangelogDialogProps) {
       <div className="space-y-10 text-sm text-gray-600">
         <section>
           <div className="flex items-center gap-3 mb-3">
-            <span className="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold">v1.4.0</span>
+            <span className="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold">v1.4.1</span>
             <span className="text-gray-400 text-xs">当前版本</span>
+            <span className="text-gray-300 text-xs ml-auto">2026-04-18 16:45</span>
+          </div>
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li>新增：附件预览弹窗（点击附件图标全屏查看图片、下载图片）</li>
+            <li>新增：Dockerfile + nginx 配置，支持 Zeabur 等平台部署</li>
+            <li>新增：MIT 开源协议</li>
+          </ul>
+        </section>
+
+        <section>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold">v1.4.0</span>
             <span className="text-gray-300 text-xs ml-auto">2026-04-16 00:30</span>
           </div>
           <ul className="list-disc pl-5 space-y-1.5">

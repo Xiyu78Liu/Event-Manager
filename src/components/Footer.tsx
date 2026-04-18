@@ -4,7 +4,7 @@ export function Footer({ onOpenGuide, onOpenChangelog }: { onOpenGuide: () => vo
       <div className="max-w-lg w-full text-center space-y-8">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Event Manager</h2>
-          <p className="text-gray-400 text-sm">任务管理系统 v1.4.0</p>
+          <p className="text-gray-400 text-sm">任务管理系统 v1.4.1</p>
         </div>
 
         <div className="space-y-3 text-sm text-gray-500">
