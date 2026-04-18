@@ -67,7 +67,7 @@ function AnimatedTitle() {
 
   return (
     <h1
-      className="text-4xl font-bold text-gray-800 tracking-tight h-10 overflow-hidden whitespace-nowrap cursor-pointer select-none"
+      className="text-2xl sm:text-4xl font-bold text-gray-800 tracking-tight h-8 sm:h-10 overflow-hidden whitespace-nowrap cursor-pointer select-none"
       onMouseEnter={replay}
       title="悬浮重新播放动画"
     >
@@ -234,21 +234,21 @@ export default function App() {
   const mainContent = (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 glass-sidebar border-b border-black/[0.06]">
-        <div className="max-w-6xl mx-auto px-6 py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between mb-3">
             <AnimatedTitle />
             <button
               onClick={() => { setEditingTask(null); setShowForm(prev => !prev); }}
-              className="glass-btn glass-btn-primary px-5 py-2 text-sm font-medium"
+              className="glass-btn glass-btn-primary px-3 sm:px-5 py-2 text-xs sm:text-sm font-medium"
             >
               {showForm && !editingTask ? '收起' : '+ 新建任务'}
             </button>
           </div>
           {/* 标签页切换 */}
-          <div className="flex gap-1 bg-gray-100/80 rounded-xl p-1 w-fit">
+          <div className="flex gap-1 bg-gray-100/80 rounded-xl p-1 w-full sm:w-fit">
             <button
               onClick={() => handleTabChange('task')}
-              className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'task'
                   ? 'bg-white shadow-sm text-gray-800'
                   : 'text-gray-500 hover:text-gray-700'
@@ -258,7 +258,7 @@ export default function App() {
             </button>
             <button
               onClick={() => handleTabChange('plan')}
-              className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'plan'
                   ? 'bg-white shadow-sm text-gray-800'
                   : 'text-gray-500 hover:text-gray-700'
@@ -270,7 +270,7 @@ export default function App() {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-6 overflow-x-hidden relative" style={{ minHeight: '60vh' }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6 overflow-x-hidden relative" style={{ minHeight: '60vh' }}>
         <AnimatePresence initial={false} custom={slideDir}>
           {activeTab === 'task' ? (
             <motion.div
@@ -281,8 +281,8 @@ export default function App() {
               exit={{ x: slideDir === 'left' ? '-100%' : '100%', position: 'absolute', top: 0, left: 0, right: 0 }}
               transition={{ type: 'tween', duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >
-              <div className="flex items-start justify-between gap-6 mb-2">
-                <div className="flex-1">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4 sm:gap-6 mb-2">
+                <div className="flex-1 w-full">
                   <div className="flex gap-2 flex-wrap">
                     {allFilters.map(f => (
                       <motion.button
@@ -296,14 +296,14 @@ export default function App() {
                       </motion.button>
                     ))}
                   </div>
-                  <div className="mt-3 flex items-center gap-2">
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
                     <input
                       type="text"
                       placeholder="新分组名称..."
                       value={newGroupName}
                       onChange={e => setNewGroupName(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleAddGroup()}
-                      className="glass-input px-3 py-1.5 text-xs w-36"
+                      className="glass-input px-3 py-1.5 text-xs w-28 sm:w-36"
                     />
                     <button onClick={handleAddGroup} className="glass-btn px-3 py-1.5 text-xs text-gray-500">
                       + 添加分组
@@ -324,7 +324,7 @@ export default function App() {
                     )}
                   </div>
                 </div>
-                <div className="w-56 flex-shrink-0">
+                <div className="w-full sm:w-56 flex-shrink-0">
                   <StatsPanel tasks={allTasks} />
                 </div>
               </div>
@@ -342,11 +342,11 @@ export default function App() {
               </AnimatePresence>
 
               <div className="mb-8">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
                     优先任务
                   </h3>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     {batchMode && (
                       <>
                         <span className="text-xs text-gray-400">已选 {selectedIds.size} 个</span>

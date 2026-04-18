@@ -49,7 +49,7 @@ export function AttachmentPreview({ attachments, isOpen, onClose }: AttachmentPr
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-[90vw] max-h-[85vh] overflow-hidden"
+            className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-[95vw] sm:w-[90vw] max-h-[85vh] overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
             {/* 关闭按钮 */}

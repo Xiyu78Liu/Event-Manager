@@ -580,17 +580,17 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-3 group"
+                className="flex items-center gap-2 sm:gap-3 group"
               >
                 {/* 时间标签 */}
-                <div className="w-24 flex-shrink-0 text-right">
+                <div className="w-20 sm:w-24 flex-shrink-0 text-right">
                   <span className="text-xs font-medium text-gray-600">{startTime}</span>
-                  <span className="text-xs text-gray-300 mx-1">-</span>
+                  <span className="text-xs text-gray-300 mx-0.5 sm:mx-1">-</span>
                   <span className="text-xs text-gray-400">{endTime}</span>
                 </div>
 
                 {/* 时间块 */}
-                <div className={`flex-1 relative rounded-xl px-4 py-3 transition-all ${
+                <div className={`flex-1 relative rounded-xl px-3 sm:px-4 py-2 sm:py-3 transition-all ${
                   isTask
                     ? 'bg-indigo-50 border border-indigo-100 hover:bg-indigo-100'
                     : 'bg-green-50 border border-green-100 hover:bg-green-100'
