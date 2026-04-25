@@ -9,13 +9,33 @@ export function ChangelogDialog({ isOpen, onClose }: ChangelogDialogProps) {
   return (
     <FullScreenDialog isOpen={isOpen} onClose={onClose}>
       <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">更新日志</h2>
-      <p className="text-xs text-[var(--text-muted)] mb-8">总开发时间：15.8 hr</p>
+      <p className="text-xs text-[var(--text-muted)] mb-8">总开发时间：18.5 hr</p>
 
       <div className="space-y-10 text-sm text-[var(--text-secondary)]">
         <section>
           <div className="flex items-center gap-3 mb-3">
-            <span className="px-2.5 py-1 rounded-full bg-[rgba(var(--color-primary-rgb),0.15)] text-[var(--text-primary)] text-xs font-semibold">v2.1.0</span>
+            <span className="px-2.5 py-1 rounded-full bg-[rgba(var(--color-primary-rgb),0.15)] text-[var(--text-primary)] text-xs font-semibold">v2.1.1</span>
             <span className="text-[var(--text-muted)] text-xs">当前版本</span>
+            <span className="text-[var(--text-faint)] text-xs ml-auto">2026-04-25 16:00</span>
+          </div>
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li>修复：TimePicker 使用 Portal 渲染，解决 backdrop-filter 导致的图层错误</li>
+            <li>修复：TimePicker 移除 scroll 事件监听，解决下拉面板移动过快的 bug</li>
+            <li>修复：深色模式下所有组件文字显示不清（全面替换硬编码颜色为 CSS 变量）</li>
+            <li>修复：日期板块展开面板去除 AnimatePresence 动画，任务标签始终可见</li>
+            <li>修复：颜色选择圆圈黑色边框缝隙（border 改为 ring）</li>
+            <li>修复：颜色选择圆圈白色勾居中</li>
+            <li>修复：日期状态指示条镜像（弧度朝左）</li>
+            <li>优化：设置面板宽度扩展，"跟随系统"文字不再换行</li>
+            <li>优化：使用说明增加视觉层次（加粗、边框线、提示框）</li>
+            <li>优化：主题系统扩展至 5 色（conic-gradient 展示）</li>
+            <li>优化：更新日志 v2.0.0 补充具体时间</li>
+          </ul>
+        </section>
+
+        <section>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="px-2.5 py-1 rounded-full bg-[var(--bg-filter)] text-[var(--text-secondary)] text-xs font-semibold">v2.1.0</span>
             <span className="text-[var(--text-faint)] text-xs ml-auto">2026-04-25 14:30</span>
           </div>
           <ul className="list-disc pl-5 space-y-1.5">
