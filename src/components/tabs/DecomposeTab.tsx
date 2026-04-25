@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SubTaskForm } from '../SubTaskForm';
 import type { Task, SubTask, SubTaskFormData } from '../../types';
-import { getPriorityClasses, formatDate, getDateStatusClasses, getDateStatus } from '../../utils/dateUtils';
+import { getPriorityClasses, formatDateTime, getDateStatusClasses, getDateStatus } from '../../utils/dateUtils';
 
 interface DecomposeTabProps {
   tasks: Task[];
@@ -86,6 +86,10 @@ export function DecomposeTab({
       const confirmed = window.confirm('所有子任务已完成，是否将父任务标记为完成？');
       if (confirmed) {
         toggleComplete(parentId);
+        // 完成父任务后清除选中状态，让任务从分解界面消失
+        setSelectedParentId('');
+        setShowAddForm(false);
+        setEditingSubTask(null);
       }
     }
   };
@@ -133,7 +137,7 @@ export function DecomposeTab({
           <div className="flex items-center gap-4 text-xs text-[var(--text-muted)]">
             {selectedTask.dueDate && (
               <span className={getDateStatusClasses(getDateStatus(selectedTask.dueDate))}>
-                截止: {formatDate(selectedTask.dueDate)}
+                截止: {formatDateTime(selectedTask.dueDate, selectedTask.dueDate.includes('T') ? selectedTask.dueDate.split('T')[1] : undefined)}
               </span>
             )}
             <span>
@@ -215,7 +219,7 @@ export function DecomposeTab({
                     <div className="flex items-center gap-3 mt-0.5">
                       {subTask.dueDate && (
                         <span className={`text-xs ${getDateStatusClasses(getDateStatus(subTask.dueDate))}`}>
-                          {formatDate(subTask.dueDate)}
+                          {formatDateTime(subTask.dueDate, subTask.dueDate.includes('T') ? subTask.dueDate.split('T')[1] : undefined)}
                         </span>
                       )}
                       {subTask.notes && (

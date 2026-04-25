@@ -16,6 +16,27 @@ export function getDateStatus(dueDate: string | undefined): DateStatus {
   return 'normal';
 }
 
+// 带时间的截止日期状态判断（精确到小时）
+export function getDateTimeStatus(dueDate: string | undefined, dueTime: string | undefined): DateStatus {
+  if (!dueDate) return 'none';
+
+  const now = new Date();
+  const due = new Date(dueDate);
+  if (dueTime) {
+    const [h, m] = dueTime.split(':').map(Number);
+    due.setHours(h, m, 0, 0);
+  } else {
+    due.setHours(23, 59, 59, 0);
+  }
+
+  const diffMs = due.getTime() - now.getTime();
+  const diffHours = diffMs / (1000 * 60 * 60);
+
+  if (diffMs < 0) return 'overdue';
+  if (diffHours <= 24) return 'soon';
+  return 'normal';
+}
+
 export function getDateStatusClasses(status: DateStatus): string {
   switch (status) {
     case 'overdue':
@@ -49,6 +70,20 @@ export function formatDate(dateStr: string): string {
     day: 'numeric',
     weekday: 'short',
   });
+}
+
+// 带时间的日期格式化
+export function formatDateTime(dateStr: string, timeStr?: string): string {
+  const date = new Date(dateStr);
+  const datePart = date.toLocaleDateString('zh-CN', {
+    month: 'short',
+    day: 'numeric',
+    weekday: 'short',
+  });
+  if (timeStr) {
+    return `${datePart} ${timeStr}`;
+  }
+  return datePart;
 }
 
 export function getPriorityClasses(priority: string): string {
@@ -105,9 +140,9 @@ export function getCalendarDays(year: number, month: number): Array<{ date: Date
 }
 
 export function getTasksForDate<T extends { dueDate: string; completed: boolean }>(items: T[], dateStr: string): T[] {
-  return items.filter(t => t.dueDate === dateStr);
+  return items.filter(t => t.dueDate.startsWith(dateStr));
 }
 
 export function getSubTasksForDate<T extends { dueDate: string; completed: boolean }>(items: T[], dateStr: string): T[] {
-  return items.filter(s => s.dueDate === dateStr);
+  return items.filter(s => s.dueDate.startsWith(dateStr));
 }

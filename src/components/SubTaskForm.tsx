@@ -14,6 +14,7 @@ const initialFormData: SubTaskFormData = {
   name: '',
   priority: '中',
   dueDate: '',
+  dueTime: '',
   estimatedTime: '',
   notes: '',
 };
@@ -63,10 +64,14 @@ export function SubTaskForm({ onSubmit, onCancel, editingSubTask }: SubTaskFormP
 
   useEffect(() => {
     if (editingSubTask) {
+      const dueDateParts = editingSubTask.dueDate.includes('T')
+        ? editingSubTask.dueDate.split('T')
+        : [editingSubTask.dueDate, ''];
       setFormData({
         name: editingSubTask.name,
         priority: editingSubTask.priority,
-        dueDate: editingSubTask.dueDate,
+        dueDate: dueDateParts[0],
+        dueTime: dueDateParts[1] || '',
         estimatedTime: editingSubTask.estimatedTime || '',
         notes: editingSubTask.notes || '',
       });
@@ -126,6 +131,15 @@ export function SubTaskForm({ onSubmit, onCancel, editingSubTask }: SubTaskFormP
             type="date"
             value={formData.dueDate}
             onChange={e => setFormData(prev => ({ ...prev, dueDate: e.target.value }))}
+            className="glass-input w-full px-4 py-2.5 text-sm"
+          />
+        </div>
+        <div>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">截止时间（可选）</label>
+          <input
+            type="time"
+            value={formData.dueTime}
+            onChange={e => setFormData(prev => ({ ...prev, dueTime: e.target.value }))}
             className="glass-input w-full px-4 py-2.5 text-sm"
           />
         </div>

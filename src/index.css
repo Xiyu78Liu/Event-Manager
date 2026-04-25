@@ -80,8 +80,26 @@
 body {
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   background: var(--bg-page);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 隐藏滚动条 */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 手机端安全区域 */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 
 /* 毛玻璃卡片 — 适配白色背景 */

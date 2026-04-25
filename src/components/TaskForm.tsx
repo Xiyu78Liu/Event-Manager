@@ -16,6 +16,7 @@ const initialFormData: TaskFormData = {
   group: '工作',
   priority: '中',
   dueDate: '',
+  dueTime: '',
   estimatedTime: '',
   attachments: [],
   notes: '',
@@ -32,11 +33,15 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
 
   useEffect(() => {
     if (editingTask) {
+      const dueDateParts = editingTask.dueDate.includes('T')
+        ? editingTask.dueDate.split('T')
+        : [editingTask.dueDate, ''];
       setFormData({
         name: editingTask.name,
         group: editingTask.group,
         priority: editingTask.priority,
-        dueDate: editingTask.dueDate,
+        dueDate: dueDateParts[0],
+        dueTime: dueDateParts[1] || '',
         estimatedTime: editingTask.estimatedTime || '',
         attachments: Array.isArray(editingTask.attachments) ? editingTask.attachments : [],
         notes: editingTask.notes || '',
@@ -118,6 +123,15 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
             type="date"
             value={formData.dueDate}
             onChange={e => setFormData(prev => ({ ...prev, dueDate: e.target.value }))}
+            className="glass-input w-full px-4 py-3 text-sm"
+          />
+        </div>
+        <div>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">截止时间（可选）</label>
+          <input
+            type="time"
+            value={formData.dueTime}
+            onChange={e => setFormData(prev => ({ ...prev, dueTime: e.target.value }))}
             className="glass-input w-full px-4 py-3 text-sm"
           />
         </div>

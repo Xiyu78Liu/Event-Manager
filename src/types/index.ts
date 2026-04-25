@@ -38,7 +38,8 @@ export interface TaskFormData {
   name: string;
   group: string;
   priority: Priority;
-  dueDate: string;
+  dueDate: string;       // 格式 "YYYY-MM-DD" 或 "YYYY-MM-DDTHH:mm"
+  dueTime: string;       // 格式 "HH:mm" 或空字符串
   estimatedTime: string;
   attachments: Attachment[];
   notes: string;
@@ -82,7 +83,8 @@ export interface SubTask {
 export interface SubTaskFormData {
   name: string;
   priority: Priority;
-  dueDate: string;
+  dueDate: string;       // 格式 "YYYY-MM-DD" 或 "YYYY-MM-DDTHH:mm"
+  dueTime: string;       // 格式 "HH:mm" 或空字符串
   estimatedTime: string;
   notes: string;
 }

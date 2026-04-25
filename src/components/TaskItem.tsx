@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Task, Attachment } from '../types';
-import { getDateStatus, getDateStatusClasses, getDateIndicatorClasses, formatDate, getPriorityClasses } from '../utils/dateUtils';
+import { getDateStatus, getDateStatusClasses, getDateIndicatorClasses, formatDate, formatDateTime, getPriorityClasses } from '../utils/dateUtils';
 import { AttachmentPreview } from './AttachmentPreview';
 
 interface TaskItemProps {
@@ -112,7 +112,7 @@ export function TaskItem({ task, onToggleComplete, onEdit, onDelete }: TaskItemP
               <p className={`text-xs ${getDateStatusClasses(dateStatus)}`}>
                 {dateStatus === 'overdue' && '已过期 · '}
                 {dateStatus === 'soon' && '即将到期 · '}
-                {formatDate(task.dueDate)}
+                {formatDateTime(task.dueDate, task.dueDate.includes('T') ? task.dueDate.split('T')[1] : undefined)}
               </p>
             )}
             {task.completed && task.completedAt && (

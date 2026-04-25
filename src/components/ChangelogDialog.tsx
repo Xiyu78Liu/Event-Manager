@@ -9,13 +9,26 @@ export function ChangelogDialog({ isOpen, onClose }: ChangelogDialogProps) {
   return (
     <FullScreenDialog isOpen={isOpen} onClose={onClose}>
       <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">更新日志</h2>
-      <p className="text-xs text-[var(--text-muted)] mb-8">总开发时间：18.5 hr</p>
+      <p className="text-xs text-[var(--text-muted)] mb-8">总开发时间：19 hr</p>
 
       <div className="space-y-10 text-sm text-[var(--text-secondary)]">
         <section>
           <div className="flex items-center gap-3 mb-3">
-            <span className="px-2.5 py-1 rounded-full bg-[rgba(var(--color-primary-rgb),0.15)] text-[var(--text-primary)] text-xs font-semibold">v2.1.1</span>
+            <span className="px-2.5 py-1 rounded-full bg-[rgba(var(--color-primary-rgb),0.15)] text-[var(--text-primary)] text-xs font-semibold">v2.2.0</span>
             <span className="text-[var(--text-muted)] text-xs">当前版本</span>
+            <span className="text-[var(--text-faint)] text-xs ml-auto">2026-04-25</span>
+          </div>
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li>新增：截止日期支持设置具体时间（几点截止），精确到分钟</li>
+            <li>修复：分解界面完成父任务后取消勾选子任务导致状态不同步的 bug</li>
+            <li>优化：手机端兼容性改进（安全区域适配、隐藏滚动条、触摸高亮去除）</li>
+            <li>优化：viewport 适配刘海屏（viewport-fit=cover）</li>
+          </ul>
+        </section>
+
+        <section>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="px-2.5 py-1 rounded-full bg-[var(--bg-filter)] text-[var(--text-secondary)] text-xs font-semibold">v2.1.1</span>
             <span className="text-[var(--text-faint)] text-xs ml-auto">2026-04-25 16:00</span>
           </div>
           <ul className="list-disc pl-5 space-y-1.5">

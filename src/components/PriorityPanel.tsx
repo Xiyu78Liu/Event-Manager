@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Task, Attachment, SubTask } from '../types';
 import type { AppSettings } from '../hooks/useSettings';
-import { getDateStatus, getDateIndicatorClasses, formatDate, getPriorityClasses } from '../utils/dateUtils';
+import { getDateStatus, getDateIndicatorClasses, formatDateTime, getPriorityClasses } from '../utils/dateUtils';
 import { AttachmentPreview } from './AttachmentPreview';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -46,6 +46,7 @@ export function PriorityPanel({ tasks, subTasks = [], onToggleComplete, onEdit, 
       <AnimatePresence>
         {tasks.map((task, index) => {
           const dateStatus = getDateStatus(task.dueDate);
+          const dueTime = task.dueDate.includes('T') ? task.dueDate.split('T')[1] : undefined;
           const isHigh = task.priority === '高';
           const isSelected = batchMode && selectedIds?.has(task.id);
 
@@ -151,7 +152,7 @@ export function PriorityPanel({ tasks, subTasks = [], onToggleComplete, onEdit, 
                   {task.priority}
                 </span>
                 {task.dueDate && (
-                  <span className="text-xs text-[var(--text-faint)] flex-shrink-0">{formatDate(task.dueDate)}</span>
+                  <span className="text-xs text-[var(--text-faint)] flex-shrink-0">{formatDateTime(task.dueDate, dueTime)}</span>
                 )}
                 {/* 编辑和删除按钮 */}
                 {!batchMode && (

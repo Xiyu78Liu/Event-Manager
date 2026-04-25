@@ -76,7 +76,13 @@ export function useTasks() {
   const addTask = useCallback((data: TaskFormData) => {
     const newTask: Task = {
       id: uuidv4(),
-      ...data,
+      name: data.name,
+      group: data.group,
+      priority: data.priority,
+      dueDate: data.dueTime ? `${data.dueDate}T${data.dueTime}` : data.dueDate,
+      estimatedTime: data.estimatedTime,
+      attachments: data.attachments,
+      notes: data.notes,
       completed: false,
       createdAt: new Date().toISOString(),
       completedAt: null,
@@ -87,7 +93,17 @@ export function useTasks() {
   }, []);
 
   const updateTask = useCallback((id: string, data: Partial<TaskFormData & { completed: boolean }>) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...data } : t));
+    setTasks(prev => prev.map(t => {
+      if (t.id !== id) return t;
+      const updated = { ...t, ...data };
+      // 如果有 dueTime，合并到 dueDate 中
+      if (data.dueDate !== undefined || data.dueTime !== undefined) {
+        const dueDate = data.dueDate ?? t.dueDate.split('T')[0];
+        const dueTime = data.dueTime ?? (t.dueDate.includes('T') ? t.dueDate.split('T')[1] : '');
+        updated.dueDate = dueTime ? `${dueDate}T${dueTime}` : dueDate;
+      }
+      return updated;
+    }));
   }, []);
 
   const deleteTask = useCallback((id: string) => {
@@ -146,7 +162,11 @@ export function useTasks() {
     const newSubTask: SubTask = {
       id: uuidv4(),
       parentId,
-      ...data,
+      name: data.name,
+      priority: data.priority,
+      dueDate: data.dueTime ? `${data.dueDate}T${data.dueTime}` : data.dueDate,
+      estimatedTime: data.estimatedTime,
+      notes: data.notes,
       completed: false,
       createdAt: new Date().toISOString(),
       completedAt: null,
@@ -158,7 +178,17 @@ export function useTasks() {
   }, []);
 
   const updateSubTask = useCallback((id: string, data: Partial<SubTaskFormData & { completed: boolean }>) => {
-    setSubTasks(prev => prev.map(st => st.id === id ? { ...st, ...data } : st));
+    setSubTasks(prev => prev.map(st => {
+      if (st.id !== id) return st;
+      const updated = { ...st, ...data };
+      // 如果有 dueTime，合并到 dueDate 中
+      if (data.dueDate !== undefined || data.dueTime !== undefined) {
+        const dueDate = data.dueDate ?? st.dueDate.split('T')[0];
+        const dueTime = data.dueTime ?? (st.dueDate.includes('T') ? st.dueDate.split('T')[1] : '');
+        updated.dueDate = dueTime ? `${dueDate}T${dueTime}` : dueDate;
+      }
+      return updated;
+    }));
   }, []);
 
   const deleteSubTask = useCallback((id: string) => {
