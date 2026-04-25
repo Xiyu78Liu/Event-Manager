@@ -11,7 +11,7 @@ export function FullScreenDialog({ isOpen, onClose, children }: FullScreenDialog
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[60] bg-white/95 backdrop-blur-lg flex flex-col"
+          className="fixed inset-0 z-[60] bg-[var(--bg-card-solid)] backdrop-blur-lg flex flex-col"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -21,7 +21,7 @@ export function FullScreenDialog({ isOpen, onClose, children }: FullScreenDialog
           <div className="flex-shrink-0 flex justify-end p-3 sm:p-5">
             <button
               onClick={onClose}
-              className="glass-btn px-4 py-2 text-sm text-gray-600"
+              className="glass-btn px-4 py-2 text-sm text-[var(--text-secondary)]"
             >
               关闭
             </button>

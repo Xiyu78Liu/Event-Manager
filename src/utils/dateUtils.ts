@@ -63,3 +63,51 @@ export function getPriorityClasses(priority: string): string {
       return 'bg-gray-100 text-gray-600 border-gray-200';
   }
 }
+
+export function formatDateStr(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+export function getCalendarDays(year: number, month: number): Array<{ date: Date; isCurrentMonth: boolean; isToday: boolean; dateStr: string }> {
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDay = firstDay.getDay(); // 0=Sunday
+  const daysInMonth = lastDay.getDate();
+
+  const days: Array<{ date: Date; isCurrentMonth: boolean; isToday: boolean; dateStr: string }> = [];
+  const today = new Date();
+  const todayStr = formatDateStr(today);
+
+  // 前月补位
+  const prevMonthLastDay = new Date(year, month, 0).getDate();
+  for (let i = startDay - 1; i >= 0; i--) {
+    const d = new Date(year, month - 1, prevMonthLastDay - i);
+    days.push({ date: d, isCurrentMonth: false, isToday: formatDateStr(d) === todayStr, dateStr: formatDateStr(d) });
+  }
+
+  // 当月
+  for (let i = 1; i <= daysInMonth; i++) {
+    const d = new Date(year, month, i);
+    days.push({ date: d, isCurrentMonth: true, isToday: formatDateStr(d) === todayStr, dateStr: formatDateStr(d) });
+  }
+
+  // 后月补位（补满 6 行 = 42 天）
+  const remaining = 42 - days.length;
+  for (let i = 1; i <= remaining; i++) {
+    const d = new Date(year, month + 1, i);
+    days.push({ date: d, isCurrentMonth: false, isToday: formatDateStr(d) === todayStr, dateStr: formatDateStr(d) });
+  }
+
+  return days;
+}
+
+export function getTasksForDate<T extends { dueDate: string; completed: boolean }>(items: T[], dateStr: string): T[] {
+  return items.filter(t => t.dueDate === dateStr);
+}
+
+export function getSubTasksForDate<T extends { dueDate: string; completed: boolean }>(items: T[], dateStr: string): T[] {
+  return items.filter(s => s.dueDate === dateStr);
+}

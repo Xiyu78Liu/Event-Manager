@@ -7,6 +7,7 @@ import { generateAIPlan, getApiKey, setApiKey } from '../utils/aiService';
 interface PlannerPanelProps {
   tasks: Task[]; // 未完成的任务列表
   groups: string[]; // 分组列表
+  onNavigateToTask?: () => void;
 }
 
 // 解析 estimatedTime "2:30" → 分钟数
@@ -36,12 +37,13 @@ type Mode = 'diy' | 'ai';
 // 快捷休息时长选项
 const BREAK_PRESETS = [5, 10, 15, 30];
 
-export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
+export function PlannerPanel({ tasks, groups, onNavigateToTask }: PlannerPanelProps) {
   const [mode, setMode] = useState<Mode>('diy');
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddBreak, setShowAddBreak] = useState(false);
   const [planGroupFilter, setPlanGroupFilter] = useState('全部');
   const [aiSelectedIds, setAiSelectedIds] = useState<Set<string>>(new Set());
+  const [aiUserPrompt, setAiUserPrompt] = useState('');
 
   const handleModeChange = (newMode: Mode) => {
     setMode(newMode);
@@ -141,7 +143,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
     setAiSummary('');
 
     try {
-      const result = await generateAIPlan(candidates, aiStartHour, key);
+      const result = await generateAIPlan(candidates, aiStartHour, key, aiUserPrompt);
       updatePlan({
         ...plan,
         blocks: result.blocks,
@@ -177,8 +179,8 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
       {/* 标题 + 模式切换 */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">时间规划</h3>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">时间规划</h3>
+          <p className="text-xs text-[var(--text-faint)] mt-0.5">
             {plan.blocks.length > 0
               ? `${plan.blocks.filter(b => b.type === 'task').length} 个任务 · ${formatDuration(totalTaskMin)} · 休息 ${formatDuration(totalBreakMin)} · ${getEndTime()} 结束`
               : '添加任务和休息，规划你的一天'}
@@ -186,11 +188,11 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
         </div>
 
         {/* 模式切换 */}
-        <div className="flex bg-gray-100 rounded-xl p-1">
+        <div className="flex bg-[var(--bg-filter)] rounded-xl p-1">
           <button
             onClick={() => handleModeChange('diy')}
             className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              mode === 'diy' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500'
+              mode === 'diy' ? 'bg-[var(--bg-card-solid)] shadow-sm text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
             }`}
           >
             手动规划
@@ -198,7 +200,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           <button
             onClick={() => handleModeChange('ai')}
             className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              mode === 'ai' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500'
+              mode === 'ai' ? 'bg-[var(--bg-card-solid)] shadow-sm text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
             }`}
           >
             AI 规划
@@ -214,19 +216,19 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           className="glass-card p-5"
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-              <svg className="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <div className="w-8 h-8 rounded-lg bg-[rgba(var(--color-primary-rgb),0.15)] flex items-center justify-center">
+              <svg className="w-4 h-4 text-[rgba(var(--color-primary-rgb),1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
               </svg>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-gray-700">智能规划</h4>
-              <p className="text-xs text-gray-400">根据任务优先级和预估时间自动排班</p>
+              <h4 className="text-sm font-semibold text-[var(--text-primary)]">智能规划</h4>
+              <p className="text-xs text-[var(--text-faint)]">根据任务优先级和预估时间自动排班</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 mb-4">
-            <label className="text-xs text-gray-500">开始时间</label>
+            <label className="text-xs text-[var(--text-muted)]">开始时间</label>
             <select
               value={aiStartHour}
               onChange={e => setAiStartHour(Number(e.target.value))}
@@ -236,17 +238,29 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 <option key={h} value={h}>{h}:00</option>
               ))}
             </select>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-[var(--text-faint)]">
               （需要任务设置了预估时间）
             </span>
           </div>
 
+          {/* 给 AI 的额外要求 */}
+          <div className="mb-4">
+            <label className="text-xs text-[var(--text-muted)] mb-1.5 block font-medium">给 AI 的额外要求（可选）</label>
+            <textarea
+              value={aiUserPrompt}
+              onChange={e => setAiUserPrompt(e.target.value)}
+              placeholder="例如：我今天下午有会议，请把高优先级任务安排在上午..."
+              className="glass-input w-full px-3 py-2 text-sm resize-none"
+              rows={2}
+            />
+          </div>
+
           {/* 分组筛选 */}
           <div className="flex items-center gap-2 mb-3 flex-wrap">
-            <span className="text-xs text-gray-500">分组：</span>
+            <span className="text-xs text-[var(--text-muted)]">分组：</span>
             <button
               onClick={() => { setPlanGroupFilter('全部'); setAiSelectedIds(new Set()); }}
-              className={`px-2.5 py-1 text-xs rounded-lg transition-colors ${planGroupFilter === '全部' ? 'bg-indigo-100 text-indigo-700 font-medium' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}
+              className={`px-2.5 py-1 text-xs rounded-lg transition-colors ${planGroupFilter === '全部' ? 'bg-[rgba(var(--color-primary-rgb),0.15)] text-[rgba(var(--color-primary-rgb),1)] font-medium' : 'bg-[var(--bg-filter)] text-[var(--text-muted)] hover:bg-[var(--bg-filter)]'}`}
             >
               全部
             </button>
@@ -254,7 +268,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
               <button
                 key={g}
                 onClick={() => { setPlanGroupFilter(g); setAiSelectedIds(new Set()); }}
-                className={`px-2.5 py-1 text-xs rounded-lg transition-colors ${planGroupFilter === g ? 'bg-indigo-100 text-indigo-700 font-medium' : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}
+                className={`px-2.5 py-1 text-xs rounded-lg transition-colors ${planGroupFilter === g ? 'bg-[rgba(var(--color-primary-rgb),0.15)] text-[rgba(var(--color-primary-rgb),1)] font-medium' : 'bg-[var(--bg-filter)] text-[var(--text-muted)] hover:bg-[var(--bg-filter)]'}`}
               >
                 {g}
               </button>
@@ -263,8 +277,8 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
 
           {/* 任务选择 */}
           <div className="flex items-center gap-3 mb-3">
-            <span className="text-xs text-gray-500">可规划任务：</span>
-            <span className="text-xs font-medium text-indigo-600">
+            <span className="text-xs text-[var(--text-muted)]">可规划任务：</span>
+            <span className="text-xs font-medium text-[rgba(var(--color-primary-rgb),1)]">
               {(() => {
                 let c = tasks.filter(t => parseEstimatedTime(t.estimatedTime) > 0);
                 if (planGroupFilter !== '全部') c = c.filter(t => t.group === planGroupFilter);
@@ -272,7 +286,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
               })()} 个
             </span>
             {aiSelectedIds.size > 0 && (
-              <span className="text-xs text-gray-400">（已选 {aiSelectedIds.size} 个）</span>
+              <span className="text-xs text-[var(--text-faint)]">（已选 {aiSelectedIds.size} 个）</span>
             )}
           </div>
 
@@ -286,7 +300,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
               return c.map(t => {
                 const checked = isAllSelected || aiSelectedIds.has(t.id);
                 return (
-                  <label key={t.id} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors ${checked ? 'bg-white' : 'bg-gray-50 opacity-50'}`}>
+                  <label key={t.id} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors ${checked ? 'bg-[var(--bg-card-solid)]' : 'bg-[var(--bg-filter)] opacity-50'}`}>
                     <input
                       type="checkbox"
                       checked={checked}
@@ -305,11 +319,11 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                           return next;
                         });
                       }}
-                      className="w-3.5 h-3.5 rounded border-gray-300 text-indigo-600"
+                      className="w-3.5 h-3.5 rounded border-[var(--border-input)] text-[rgba(var(--color-primary-rgb),1)]"
                     />
-                    <span className="text-xs text-gray-700 truncate flex-1">{t.name}</span>
-                    <span className="text-xs text-gray-400">{t.estimatedTime || '未设置'}</span>
-                    <span className={`text-xs px-1 py-0.5 rounded ${t.priority === '高' ? 'text-red-500' : t.priority === '中' ? 'text-amber-500' : 'text-blue-500'}`}>
+                    <span className="text-xs text-[var(--text-primary)] truncate flex-1">{t.name}</span>
+                    <span className="text-xs text-[var(--text-faint)]">{t.estimatedTime || '未设置'}</span>
+                    <span className={`text-xs px-1 py-0.5 rounded ${t.priority === '高' ? 'text-red-500' : t.priority === '中' ? 'text-[rgba(var(--color-warning-rgb),1)]' : 'text-blue-500'}`}>
                       {t.priority}
                     </span>
                   </label>
@@ -322,7 +336,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
             let c = tasks.filter(t => parseEstimatedTime(t.estimatedTime) > 0);
             if (planGroupFilter !== '全部') c = c.filter(t => t.group === planGroupFilter);
             if (c.length === 0) return (
-              <p className="text-xs text-amber-500 bg-amber-50 rounded-lg px-3 py-2 mb-3">
+              <p className="text-xs text-[rgba(var(--color-warning-rgb),1)] bg-[rgba(var(--color-warning-rgb),0.08)] rounded-lg px-3 py-2 mb-3">
                 提示：请先给任务设置预估时间，AI 才能自动排班
               </p>
             );
@@ -351,12 +365,12 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           <div className="mt-3 flex items-center gap-2">
             <button
               onClick={() => setShowApiKeyInput(!showApiKeyInput)}
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-xs text-[var(--text-faint)] hover:text-[var(--text-secondary)] transition-colors"
             >
               {getApiKey() ? '修改 API Key' : '设置 API Key'}
             </button>
             {getApiKey() && (
-              <span className="text-xs text-green-500">已配置</span>
+              <span className="text-xs text-[rgba(var(--color-success-rgb),1)]">已配置</span>
             )}
           </div>
 
@@ -380,7 +394,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                     保存
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-[var(--text-faint)] mt-1">
                   在 platform.deepseek.com 获取 API Key
                 </p>
               </motion.div>
@@ -396,8 +410,8 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
 
           {/* AI 总结 */}
           {aiSummary && (
-            <div className="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
-              <p className="text-xs text-indigo-700">
+            <div className="mt-3 p-3 bg-[rgba(var(--color-primary-rgb),0.08)] rounded-lg border border-[rgba(var(--color-primary-rgb),0.2)]">
+              <p className="text-xs text-[rgba(var(--color-primary-rgb),1)]">
                 <span className="font-medium">AI 建议：</span>{aiSummary}
               </p>
             </div>
@@ -422,6 +436,12 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
             添加任务
           </button>
           <button
+            onClick={() => onNavigateToTask?.()}
+            className="glass-btn px-4 py-2 text-sm text-indigo-500 hover:text-[rgba(var(--color-primary-rgb),1)]"
+          >
+            新建任务
+          </button>
+          <button
             onClick={() => { setShowAddBreak(true); setShowAddTask(false); }}
             className="glass-btn px-4 py-2 text-sm flex items-center gap-1.5"
           >
@@ -433,7 +453,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           {plan.blocks.length > 0 && (
             <button
               onClick={() => updatePlan({ ...plan, blocks: [] })}
-              className="glass-btn px-4 py-2 text-sm text-gray-400 ml-auto"
+              className="glass-btn px-4 py-2 text-sm text-[var(--text-faint)] ml-auto"
             >
               清空
             </button>
@@ -452,7 +472,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">选择任务</label>
+                <label className="text-[var(--text-faint)] text-xs mb-1 block">选择任务</label>
                 <select
                   value={selectedTaskId}
                   onChange={e => setSelectedTaskId(e.target.value)}
@@ -477,7 +497,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 </select>
               </div>
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">开始时间</label>
+                <label className="text-[var(--text-faint)] text-xs mb-1 block">开始时间</label>
                 <input
                   type="time"
                   value={newBlockStart}
@@ -486,7 +506,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">时长（分钟）</label>
+                <label className="text-[var(--text-faint)] text-xs mb-1 block">时长（分钟）</label>
                 <input
                   type="number"
                   min={5}
@@ -517,7 +537,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">开始时间</label>
+                <label className="text-[var(--text-faint)] text-xs mb-1 block">开始时间</label>
                 <input
                   type="time"
                   value={newBlockStart}
@@ -526,7 +546,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">时长（分钟）</label>
+                <label className="text-[var(--text-faint)] text-xs mb-1 block">时长（分钟）</label>
                 <input
                   type="number"
                   min={5}
@@ -538,7 +558,7 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">快捷选择</label>
+                <label className="text-[var(--text-faint)] text-xs mb-1 block">快捷选择</label>
                 <div className="flex gap-1">
                   {BREAK_PRESETS.map(m => (
                     <button
@@ -547,8 +567,8 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                       onClick={() => setNewBlockDuration(m)}
                       className={`flex-1 py-1.5 text-xs rounded-lg transition-colors ${
                         newBlockDuration === m
-                          ? 'bg-indigo-100 text-indigo-700 font-medium'
-                          : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                          ? 'bg-[rgba(var(--color-primary-rgb),0.15)] text-[rgba(var(--color-primary-rgb),1)] font-medium'
+                          : 'bg-[var(--bg-filter)] text-[var(--text-muted)] hover:bg-[var(--bg-filter)]'
                       }`}
                     >
                       {m}min
@@ -579,21 +599,21 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                 key={block.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
+                transition={{ delay: Math.min(index * 0.05, 0.5) }}
                 className="flex items-center gap-2 sm:gap-3 group"
               >
                 {/* 时间标签 */}
                 <div className="w-20 sm:w-24 flex-shrink-0 text-right">
-                  <span className="text-xs font-medium text-gray-600">{startTime}</span>
-                  <span className="text-xs text-gray-300 mx-0.5 sm:mx-1">-</span>
-                  <span className="text-xs text-gray-400">{endTime}</span>
+                  <span className="text-xs font-medium text-[var(--text-secondary)]">{startTime}</span>
+                  <span className="text-xs text-[var(--text-weakest)] mx-0.5 sm:mx-1">-</span>
+                  <span className="text-xs text-[var(--text-faint)]">{endTime}</span>
                 </div>
 
                 {/* 时间块 */}
                 <div className={`flex-1 relative rounded-xl px-3 sm:px-4 py-2 sm:py-3 transition-all ${
                   isTask
-                    ? 'bg-indigo-50 border border-indigo-100 hover:bg-indigo-100'
-                    : 'bg-green-50 border border-green-100 hover:bg-green-100'
+                    ? 'bg-[rgba(var(--color-primary-rgb),0.08)] border border-[rgba(var(--color-primary-rgb),0.2)] hover:bg-[rgba(var(--color-primary-rgb),0.15)]'
+                    : 'bg-[rgba(var(--color-success-rgb),0.08)] border border-[rgba(var(--color-success-rgb),0.2)] hover:bg-[rgba(var(--color-success-rgb),0.15)]'
                 }`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -602,22 +622,22 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       ) : (
-                        <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-4 h-4 text-[rgba(var(--color-success-rgb),0.8)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
                         </svg>
                       )}
-                      <span className={`text-sm font-medium ${isTask ? 'text-indigo-700' : 'text-green-700'}`}>
+                      <span className={`text-sm font-medium ${isTask ? 'text-[rgba(var(--color-primary-rgb),1)]' : 'text-[rgba(var(--color-success-rgb),1)]'}`}>
                         {isTask ? block.taskName : '休息'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs ${isTask ? 'text-indigo-400' : 'text-green-400'}`}>
+                      <span className={`text-xs ${isTask ? 'text-indigo-400' : 'text-[rgba(var(--color-success-rgb),0.8)]'}`}>
                         {formatDuration(block.duration)}
                       </span>
                       <button
                         onClick={() => handleDeleteBlock(block.id)}
-                        className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-400 transition-all text-xs"
+                        className="opacity-0 group-hover:opacity-100 text-[var(--text-weakest)] hover:text-red-400 transition-all text-xs"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -638,8 +658,8 @@ export function PlannerPanel({ tasks, groups }: PlannerPanelProps) {
           <svg className="w-12 h-12 mx-auto mb-3 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
           </svg>
-          <p className="text-gray-400 text-sm">还没有规划内容</p>
-          <p className="text-gray-300 text-xs mt-1">
+          <p className="text-[var(--text-faint)] text-sm">还没有规划内容</p>
+          <p className="text-[var(--text-weakest)] text-xs mt-1">
             {mode === 'ai' ? '点击「生成计划」让 AI 帮你安排' : '点击上方按钮添加任务和休息'}
           </p>
         </div>

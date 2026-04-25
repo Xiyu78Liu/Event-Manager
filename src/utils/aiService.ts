@@ -26,7 +26,8 @@ interface AIGenerateResult {
 export async function generateAIPlan(
   tasks: Task[],
   startHour: number,
-  apiKey: string
+  apiKey: string,
+  userPrompt?: string
 ): Promise<AIGenerateResult> {
   const tasksWithDuration = tasks
     .map(t => ({ ...t, durationMin: parseEstimatedTime(t.estimatedTime) }))
@@ -44,7 +45,7 @@ export async function generateAIPlan(
 
 任务列表：
 ${taskList}
-
+${userPrompt ? `\n用户额外需求：\n${userPrompt}\n` : ''}
 要求：
 1. 按优先级排序（高 > 中 > 低），同优先级按预估时间短的先做
 2. 从 ${startHour}:00 开始

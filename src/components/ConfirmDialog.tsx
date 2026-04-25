@@ -30,8 +30,8 @@ export function ConfirmDialog({
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-            <p className="text-gray-600 mb-6 text-sm">{message}</p>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">{title}</h3>
+            <p className="text-[var(--text-secondary)] mb-6 text-sm">{message}</p>
             <div className="flex gap-3 justify-end">
               <button onClick={onCancel} className="glass-btn px-4 py-2 text-sm">
                 {cancelText}

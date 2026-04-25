@@ -46,8 +46,8 @@ export function TaskSummaryDialog({ isOpen, onConfirm, onSkip }: TaskSummaryDial
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">你要不要做一下总结？</h3>
-                  <p className="text-gray-500 text-sm mb-6">花一分钟回顾一下这个任务</p>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">你要不要做一下总结？</h3>
+                  <p className="text-[var(--text-muted)] text-sm mb-6">花一分钟回顾一下这个任务</p>
                   <div className="flex gap-3 justify-end">
                     <button onClick={onSkip} className="glass-btn px-4 py-2 text-sm">
                       跳过
@@ -64,18 +64,18 @@ export function TaskSummaryDialog({ isOpen, onConfirm, onSkip }: TaskSummaryDial
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">任务总结</h3>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">任务总结</h3>
 
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-gray-600 mb-2">这个任务有没有超出你的预期？</p>
+                      <p className="text-sm text-[var(--text-secondary)] mb-2">这个任务有没有超出你的预期？</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setExceeded(true)}
                           className={`flex-1 py-2 rounded-xl text-sm font-medium transition-all border ${
                             exceeded === true
                               ? 'border-red-400 bg-red-50 text-red-600'
-                              : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                              : 'border-[var(--border-default)] text-[var(--text-muted)] hover:border-[var(--border-input)]'
                           }`}
                         >
                           是的，超出了
@@ -85,7 +85,7 @@ export function TaskSummaryDialog({ isOpen, onConfirm, onSkip }: TaskSummaryDial
                           className={`flex-1 py-2 rounded-xl text-sm font-medium transition-all border ${
                             exceeded === false
                               ? 'border-emerald-400 bg-emerald-50 text-emerald-600'
-                              : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                              : 'border-[var(--border-default)] text-[var(--text-muted)] hover:border-[var(--border-input)]'
                           }`}
                         >
                           没有，符合预期
@@ -94,7 +94,7 @@ export function TaskSummaryDialog({ isOpen, onConfirm, onSkip }: TaskSummaryDial
                     </div>
 
                     <div>
-                      <p className="text-sm text-gray-600 mb-2">难度评分</p>
+                      <p className="text-sm text-[var(--text-secondary)] mb-2">难度评分</p>
                       <div className="flex gap-1">
                         {[1, 2, 3, 4, 5].map(n => (
                           <button
@@ -103,7 +103,7 @@ export function TaskSummaryDialog({ isOpen, onConfirm, onSkip }: TaskSummaryDial
                             className={`flex-1 py-2 rounded-lg text-sm transition-all ${
                               n <= difficulty
                                 ? 'bg-amber-400 text-white'
-                                : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                                : 'bg-[var(--bg-filter)] text-[var(--text-faint)] hover:bg-[var(--bg-filter-hover)]'
                             }`}
                           >
                             {n}
@@ -113,7 +113,7 @@ export function TaskSummaryDialog({ isOpen, onConfirm, onSkip }: TaskSummaryDial
                     </div>
 
                     <div>
-                      <p className="text-sm text-gray-600 mb-2">有什么想说的？</p>
+                      <p className="text-sm text-[var(--text-secondary)] mb-2">有什么想说的？</p>
                       <textarea
                         value={comment}
                         onChange={e => setComment(e.target.value)}

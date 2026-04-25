@@ -64,7 +64,7 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <h3 className="text-gray-700 font-semibold text-sm mb-4">
+      <h3 className="text-[var(--text-primary)] font-semibold text-sm mb-4">
         {editingTask ? '编辑任务' : '新建任务'}
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -80,7 +80,7 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
           />
         </div>
         <div>
-          <label className="text-gray-400 text-xs mb-1.5 block">分组</label>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">分组</label>
           <select
             value={formData.group}
             onChange={e => setFormData(prev => ({ ...prev, group: e.target.value }))}
@@ -92,7 +92,7 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
           </select>
         </div>
         <div>
-          <label className="text-gray-400 text-xs mb-1.5 block">优先级</label>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">优先级</label>
           <div className="flex gap-2">
             {priorityOptions.map(opt => (
               <button
@@ -101,8 +101,8 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
                 onClick={() => setFormData(prev => ({ ...prev, priority: opt.value }))}
                 className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all border ${
                   formData.priority === opt.value
-                    ? 'border-current bg-white shadow-sm'
-                    : 'border-gray-200 bg-gray-50/50 text-gray-400 hover:border-gray-300'
+                    ? 'border-current bg-[var(--bg-card-solid)] shadow-sm'
+                    : 'border-[var(--border-default)] bg-gray-50/50 text-[var(--text-faint)] hover:border-[var(--border-input)]'
                 }`}
                 style={formData.priority === opt.value ? { color: opt.color === 'bg-red-500' ? '#ef4444' : opt.color === 'bg-amber-500' ? '#f59e0b' : '#3b82f6' } : {}}
               >
@@ -113,7 +113,7 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
           </div>
         </div>
         <div>
-          <label className="text-gray-400 text-xs mb-1.5 block">截止日期</label>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">截止日期</label>
           <input
             type="date"
             value={formData.dueDate}
@@ -122,14 +122,14 @@ export function TaskForm({ onSubmit, onCancel, editingTask, groups }: TaskFormPr
           />
         </div>
         <div>
-          <label className="text-gray-400 text-xs mb-1.5 block">预估时间</label>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">预估时间</label>
           <TimePicker
             value={formData.estimatedTime}
             onChange={val => setFormData(prev => ({ ...prev, estimatedTime: val }))}
           />
         </div>
         <div className="sm:col-span-2">
-          <label className="text-gray-400 text-xs mb-1.5 block">备注</label>
+          <label className="text-[var(--text-faint)] text-xs mb-1.5 block">备注</label>
           <textarea
             placeholder="备注信息..."
             value={formData.notes}

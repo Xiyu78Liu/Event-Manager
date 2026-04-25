@@ -27,6 +27,7 @@ export interface Task {
   createdAt: string;
   completedAt: string | null;
   summary: TaskSummary | null;
+  subTaskIds: string[];
 }
 
 export type FilterType = '全部' | string;
@@ -60,5 +61,36 @@ export interface Plan {
   id: string;
   name: string;            // 计划名称，如"今日计划"
   blocks: PlanBlock[];
+  createdAt: string;
+}
+
+// 子任务
+export interface SubTask {
+  id: string;
+  parentId: string;
+  name: string;
+  priority: Priority;
+  dueDate: string;
+  estimatedTime: string;
+  notes: string;
+  completed: boolean;
+  createdAt: string;
+  completedAt: string | null;
+  summary: TaskSummary | null;
+}
+
+export interface SubTaskFormData {
+  name: string;
+  priority: Priority;
+  dueDate: string;
+  estimatedTime: string;
+  notes: string;
+}
+
+// 日记
+export interface DiaryEntry {
+  id: string;
+  date: string;
+  content: string;
   createdAt: string;
 }

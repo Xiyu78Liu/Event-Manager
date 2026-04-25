@@ -1,80 +1,153 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
 @theme {
   --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+:root {
+  /* 主题色 - RGB 分量，方便 rgba() 使用 */
+  --color-primary-rgb: 99, 102, 241;
+  --color-primary-light-rgb: 129, 140, 248;
+  --color-primary-dark-rgb: 79, 70, 229;
+
+  /* 5 色主题扩展 - RGB 分量 */
+  --color-theme-1-rgb: 79, 70, 229;
+  --color-theme-2-rgb: 99, 102, 241;
+  --color-theme-3-rgb: 129, 140, 248;
+  --color-theme-4-rgb: 159, 160, 250;
+  --color-theme-5-rgb: 199, 200, 255;
+
+  /* 背景 */
+  --bg-page: #f8f9fc;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-solid: rgba(255, 255, 255, 0.85);
+  --bg-sidebar: rgba(255, 255, 255, 0.75);
+  --bg-input: rgba(255, 255, 255, 0.8);
+  --bg-input-focus: rgba(255, 255, 255, 0.95);
+  --bg-btn: rgba(255, 255, 255, 0.7);
+  --bg-btn-hover: rgba(255, 255, 255, 0.9);
+  --bg-filter: rgba(255, 255, 255, 0.6);
+  --bg-filter-hover: rgba(255, 255, 255, 0.85);
+
+  /* 文字 */
+  --text-primary: #1f2937;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
+  --text-weakest: #d1d5db;
+
+  /* 边框 */
+  --border-default: rgba(0, 0, 0, 0.06);
+  --border-input: rgba(0, 0, 0, 0.08);
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-primary: 0 4px 12px rgba(var(--color-primary-rgb), 0.25);
+
+  /* 状态色 */
+  --color-danger-rgb: 239, 68, 68;
+  --color-success-rgb: 16, 185, 129;
+  --color-warning-rgb: 245, 158, 11;
+}
+
+[data-theme="dark"] {
+  --bg-page: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --bg-card-solid: rgba(30, 41, 59, 0.85);
+  --bg-sidebar: rgba(15, 23, 42, 0.85);
+  --bg-input: rgba(30, 41, 59, 0.8);
+  --bg-input-focus: rgba(30, 41, 59, 0.95);
+  --bg-btn: rgba(30, 41, 59, 0.7);
+  --bg-btn-hover: rgba(51, 65, 85, 0.8);
+  --bg-filter: rgba(30, 41, 59, 0.6);
+  --bg-filter-hover: rgba(51, 65, 85, 0.7);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --text-weakest: #475569;
+
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-input: rgba(255, 255, 255, 0.12);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
   margin: 0;
-  background: #f8f9fc;
+  background: var(--bg-page);
 }
 
 /* 毛玻璃卡片 — 适配白色背景 */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .glass-card-solid {
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--bg-card-solid);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 /* 顶部导航栏 — 轻微毛玻璃 */
 .glass-sidebar {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--bg-sidebar);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 1px solid var(--border-default);
 }
 
 /* 毛玻璃输入框 */
 .glass-input {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--bg-input);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-input);
   border-radius: 12px;
-  color: #1f2937;
+  color: var(--text-primary);
   transition: all 0.2s ease;
 }
 
 .glass-input:focus {
   outline: none;
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+  border-color: rgba(var(--color-primary-rgb), 0.4);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.08);
 }
 
 .glass-input::placeholder {
-  color: rgba(156, 163, 175, 0.8);
+  color: var(--text-faint);
+  opacity: 0.8;
 }
 
 /* 毛玻璃按钮 */
 .glass-btn {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--bg-btn);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   transition: all 0.2s ease;
   cursor: pointer;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .glass-btn:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--bg-btn-hover);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
@@ -84,14 +157,14 @@ body {
 }
 
 .glass-btn-primary {
-  background: rgba(99, 102, 241, 0.9);
-  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(var(--color-primary-rgb), 0.9);
+  border-color: rgba(var(--color-primary-rgb), 0.6);
   color: white;
 }
 
 .glass-btn-primary:hover {
-  background: rgba(99, 102, 241, 1);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  background: rgba(var(--color-primary-rgb), 1);
+  box-shadow: var(--shadow-primary);
 }
 
 .glass-btn-danger {
@@ -107,30 +180,30 @@ body {
 
 /* 分类筛选标签按钮 */
 .filter-tab {
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--bg-filter);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-default);
   border-radius: 9999px;
   padding: 8px 20px;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #6b7280;
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
 .filter-tab:hover {
-  background: rgba(255, 255, 255, 0.85);
-  color: #374151;
+  background: var(--bg-filter-hover);
+  color: var(--text-secondary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .filter-tab.active {
-  background: rgba(99, 102, 241, 0.9);
-  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(var(--color-primary-rgb), 0.9);
+  border-color: rgba(var(--color-primary-rgb), 0.6);
   color: white;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 2px 8px rgba(var(--color-primary-rgb), 0.2);
 }
 
 /* 滚动条 */
@@ -141,11 +214,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(128, 128, 128, 0.15);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(128, 128, 128, 0.25);
 }
 
 /* select 下拉框 */
@@ -160,5 +233,20 @@ select.glass-input {
 
 select.glass-input option {
   background: white;
-  color: #1f2937;
+  color: var(--text-primary);
+}
+
+/* 颜色选择器去除默认样式 */
+input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 8px;
 }

@@ -128,7 +128,7 @@ export function PageTransition({ children, footerContent }: PageTransitionProps)
         <div>
           {footerContent}
           <div className="fixed top-5 left-5 z-40">
-            <button onClick={handleBackToMain} className="glass-btn px-4 py-2 text-sm text-gray-600">
+            <button onClick={handleBackToMain} className="glass-btn px-4 py-2 text-sm text-[var(--text-secondary)]">
               ← 返回
             </button>
           </div>
